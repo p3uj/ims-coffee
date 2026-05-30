@@ -1,26 +1,111 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { DatabaseService } from 'src/database/database.service';
+import * as bcrypt from 'bcrypt';
+import { userSelect } from './queries/auth.select';
+import { userWhere } from './queries/auth.where';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async create(createAuthDto: CreateAuthDto) {
+    const existingUser = await this.databaseService.user.findUnique({
+      where: {
+        email: createAuthDto.email,
+      },
+    });
+
+    const existingRole = await this.databaseService.role.findUnique({
+      where: {
+        id: createAuthDto.roleId,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('User already exists');
+    }
+
+    if (!existingRole) {
+      throw new NotFoundException('Role not found');
+    }
+
+    const hashedPassword = await bcrypt.hash(createAuthDto.password, 10);
+    const { roleId, ...rest } = createAuthDto;
+
+    // Create User Account
+    const user = await this.databaseService.user.create({
+      data: {
+        ...rest,
+        password: hashedPassword,
+
+        role: {
+          connect: {
+            id: createAuthDto.roleId,
+          },
+        },
+      },
+    });
+
+    const { password, ...safeUser } = user;
+
+    return safeUser;
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async findAll(role?: string) {
+    return this.databaseService.user.findMany({
+      where: userWhere(role),
+      select: userSelect,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async findOne(id: number) {
+    const existingUser = await this.databaseService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingUser) throw new NotFoundException('User not found');
+
+    return existingUser;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async update(id: number, updateAuthDto: UpdateAuthDto) {
+    const existingUser = await this.databaseService.role.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingUser) throw new NotFoundException('User not found');
+
+    return this.databaseService.user.update({
+      where: {
+        id,
+      },
+      data: updateAuthDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async remove(id: number) {
+    const existingUser = await this.databaseService.role.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingUser) throw new NotFoundException('User not found');
+
+    return this.databaseService.user.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
