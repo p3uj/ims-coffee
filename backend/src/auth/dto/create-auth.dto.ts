@@ -1,4 +1,12 @@
-import { IsEmail, IsInt, IsNotEmpty, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  Min,
+} from 'class-validator';
 
 export class CreateAuthDto {
   @IsEmail()
@@ -13,6 +21,11 @@ export class CreateAuthDto {
 
   @IsNotEmpty()
   password!: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  isActive!: boolean;
 
   @IsInt()
   @Min(1)
