@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -37,6 +41,19 @@ export class RoleService {
     });
 
     if (!role) throw new NotFoundException('Role not found');
+
+    
+    if (updateRoleDto.name) {
+      const normalizedName = updateRoleDto.name.toUpperCase();
+
+      const existingRoleName = await this.databaseService.role.findUnique({
+        where: {
+          name: normalizedName,
+        },
+      });
+
+      if (existingRoleName) throw new ConflictException('Role already exists');
+    }
 
     return this.databaseService.role.update({
       where: {
