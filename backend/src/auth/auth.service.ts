@@ -59,9 +59,9 @@ export class AuthService {
     return user;
   }
 
-  async findAll(role?: string) {
+  async findAll(role?: string, isActive?: boolean) {
     return this.databaseService.user.findMany({
-      where: userWhere(role),
+      where: userWhere(role, isActive),
       select: userSelect,
     });
   }
