@@ -50,11 +50,12 @@ export class AuthService {
           },
         },
       },
+
+      // Payload Response
+      select: userSelect,
     });
 
-    const { password, ...safeUser } = user;
-
-    return safeUser;
+    return user;
   }
 
   async findAll(role?: string) {
