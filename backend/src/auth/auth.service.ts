@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -97,7 +98,7 @@ export class AuthService {
   }
 
   async remove(id: number) {
-    const existingUser = await this.databaseService.role.findUnique({
+    const existingUser = await this.databaseService.user.findUnique({
       where: {
         id,
       },
@@ -105,10 +106,20 @@ export class AuthService {
 
     if (!existingUser) throw new NotFoundException('User not found');
 
-    return this.databaseService.user.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      await this.databaseService.user.delete({
+        where: {
+          id,
+        },
+      });
+
+      return {
+        message: 'User deleted successfully',
+      };
+    } catch (error) {
+      console.error(error);
+
+      throw new InternalServerErrorException('Failed to delete user');
+    }
   }
 }
