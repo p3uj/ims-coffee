@@ -3,6 +3,7 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UserQueryDto {
   @IsOptional()
+  @Transform(({ value }) => value.toUpperCase())
   @IsString()
   role?: string;
 
