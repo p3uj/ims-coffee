@@ -8,10 +8,12 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UserQueryDto } from './dto/user-query.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,8 +25,8 @@ export class AuthController {
   }
 
   @Get()
-  findAll(@Query('role') role?: string) {
-    return this.authService.findAll(role);
+  findAll(@Query() query: UserQueryDto) {
+    return this.authService.findAll(query.role, query.isActive);
   }
 
   @Get(':id')
