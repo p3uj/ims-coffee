@@ -69,6 +69,7 @@ export class AuthService {
       where: {
         id,
       },
+      select: userSelect,
     });
 
     if (!existingUser) throw new NotFoundException('User not found');
@@ -77,7 +78,7 @@ export class AuthService {
   }
 
   async update(id: number, updateAuthDto: UpdateAuthDto) {
-    const existingUser = await this.databaseService.role.findUnique({
+    const existingUser = await this.databaseService.user.findUnique({
       where: {
         id,
       },
@@ -90,6 +91,7 @@ export class AuthService {
         id,
       },
       data: updateAuthDto,
+      select: userSelect,
     });
   }
 
