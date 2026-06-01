@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -32,14 +37,57 @@ export class SuppliersService {
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} supplier`;
+    const existingSupplier = await this.databaseService.supplier.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingSupplier) throw new NotFoundException('Supplier not found');
+
+    return existingSupplier;
   }
 
   async update(id: number, updateSupplierDto: UpdateSupplierDto) {
-    return `This action updates a #${id} supplier`;
+    const existingSupplier = await this.databaseService.supplier.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingSupplier) throw new NotFoundException('Supplier not found');
+
+    return this.databaseService.supplier.update({
+      where: {
+        id,
+      },
+      data: updateSupplierDto,
+    });
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} supplier`;
+    const existingSupplier = await this.databaseService.supplier.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingSupplier) throw new NotFoundException('Supplier not found');
+
+    try {
+      await this.databaseService.supplier.delete({
+        where: {
+          id,
+        },
+      });
+
+      return {
+        message: 'Supplier deleted successfully',
+      };
+    } catch (error) {
+      console.error(error);
+
+      throw new InternalServerErrorException('Failed to delete supplier');
+    }
   }
 }
