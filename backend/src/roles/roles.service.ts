@@ -8,7 +8,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
-export class RoleService {
+export class RolesService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async create(createRoleDto: CreateRoleDto) {
@@ -42,7 +42,6 @@ export class RoleService {
 
     if (!role) throw new NotFoundException('Role not found');
 
-    
     if (updateRoleDto.name) {
       const normalizedName = updateRoleDto.name.toUpperCase();
 
