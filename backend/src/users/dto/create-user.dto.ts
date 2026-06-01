@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateAuthDto {
+export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   email!: string;

@@ -4,27 +4,27 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from 'src/database/database.service';
 import * as bcrypt from 'bcrypt';
-import { userSelect } from './queries/auth.select';
-import { userWhere } from './queries/auth.where';
+import { userSelect } from './queries/user.select';
+import { userWhere } from './queries/user.where';
 
 @Injectable()
-export class AuthService {
+export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(createAuthDto: CreateAuthDto) {
+  async create(createUserDto: CreateUserDto) {
     const existingUser = await this.databaseService.user.findUnique({
       where: {
-        email: createAuthDto.email,
+        email: createUserDto.email,
       },
     });
 
     const existingRole = await this.databaseService.role.findUnique({
       where: {
-        id: createAuthDto.roleId,
+        id: createUserDto.roleId,
       },
     });
 
@@ -36,8 +36,8 @@ export class AuthService {
       throw new NotFoundException('Role not found');
     }
 
-    const hashedPassword = await bcrypt.hash(createAuthDto.password, 10);
-    const { roleId, ...rest } = createAuthDto;
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const { roleId, ...rest } = createUserDto;
 
     // Create User Account
     const user = await this.databaseService.user.create({
@@ -47,7 +47,7 @@ export class AuthService {
 
         role: {
           connect: {
-            id: createAuthDto.roleId,
+            id: createUserDto.roleId,
           },
         },
       },
@@ -79,7 +79,7 @@ export class AuthService {
     return existingUser;
   }
 
-  async update(id: number, updateAuthDto: UpdateAuthDto) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     const existingUser = await this.databaseService.user.findUnique({
       where: {
         id,
@@ -92,7 +92,7 @@ export class AuthService {
       where: {
         id,
       },
-      data: updateAuthDto,
+      data: updateUserDto,
       select: userSelect,
     });
   }
