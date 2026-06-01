@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { DatabaseService } from 'src/database/database.service';
+import { SupplierQueryDto } from './dto/supplier-query.dto';
+import { suppplierWhere } from './queries/supplier.where';
 
 @Injectable()
 export class SuppliersService {
-  create(createSupplierDto: CreateSupplierDto) {
-    return 'This action adds a new supplier';
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async create(createSupplierDto: CreateSupplierDto) {
+    const existingSupplierEmail =
+      await this.databaseService.supplier.findUnique({
+        where: {
+          email: createSupplierDto.email,
+        },
+      });
+
+    if (existingSupplierEmail)
+      throw new ConflictException('Supplier email already exists');
+
+    return this.databaseService.supplier.create({
+      data: createSupplierDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all suppliers`;
+  async findAll(query: SupplierQueryDto) {
+    return this.databaseService.supplier.findMany({
+      where: suppplierWhere(query),
+    });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} supplier`;
   }
 
-  update(id: number, updateSupplierDto: UpdateSupplierDto) {
+  async update(id: number, updateSupplierDto: UpdateSupplierDto) {
     return `This action updates a #${id} supplier`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} supplier`;
   }
 }
