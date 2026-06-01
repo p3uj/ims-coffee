@@ -27,16 +27,151 @@ model Role {
 model User {
   id Int @id @default(autoincrement())
   roleId Int
+
   email String @unique
   firstName String 
   lastName String
   password String
   isActive Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   role Role @relation(fields: [roleId], references: [id])
 
+  purchaseOrder PurchaseOrder[]
+  inventoryTransactions InventoryTransaction[]
+
   @@map("users")
 }
 
+model Supplier {
+  id Int @id @default(autoincrement())
+  name String
+  contactPerson String?
+  phoneNumber String
+  email String @unique
+  address String
+  recordStatus RecordStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchaseOrders PurchaseOrder[]
+
+  @@map("suppliers")
+}
+
+model MeasurementUnit {
+  id Int @id @default(autoincrement())
+  name String @unique
+
+  ingredients Ingredient[]
+
+  @@map("measurement_units")
+}
+
+model Ingredient {
+  id Int @id @default(autoincrement())
+  measurementUnitId Int
+
+  name String
+  currentStock Decimal  @db.Decimal(10, 2)
+  reorderLevel Decimal  @db.Decimal(10, 2)
+  recordStatus RecordStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  measurementUnit MeasurementUnit @relation(fields: [measurementUnitId], references: [id])
+
+  purchaseOrderItems PurchaseOrderItem[]
+  inventoryTransactions InventoryTransaction[]
+
+  @@map("ingredients")
+}
+
+model PurchaseOrder {
+  id Int @id @default(autoincrement())
+  supplierId Int
+  createdBy Int
+
+  status PurchaseOrderStatus
+  orderDate DateTime
+  receivedDate DateTime?
+  recordStatus RecordStatus
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  creator User @relation(fields: [createdBy], references: [id])
+
+  purchaseOrderItems PurchaseOrderItem[]
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id Int @id @default(autoincrement())
+  purchaseOrderId Int
+  ingredientId Int
+
+  quantity Int
+  unitCost Decimal  @db.Decimal(10, 2)
+  recordStatus RecordStatus
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@map("purchase_order_items")
+}
+
+model InventoryTransaction {
+  id Int @id @default(autoincrement())
+  ingredientId Int
+  createdBy Int
+
+  transactionType TransactionType
+  referenceType ReferenceType
+  quantity Int
+  referenceId Int?
+  notes String?
+  recordStatus RecordStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  creator User @relation(fields: [createdBy], references: [id])
+
+  @@map("inventory_transactions")
+}
+
+enum RecordStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum PurchaseOrderStatus {
+  PENDING
+  APPROVED
+  RECEIVED
+  CANCELLED
+}
+
+enum TransactionType {
+  IN
+  OUT
+  WASTE
+  ADJUSTMENT
+}
+
+enum ReferenceType {
+  PURCHASE_ORDER
+  MANUAL
+  POS
+}
