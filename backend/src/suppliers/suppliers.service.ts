@@ -64,30 +64,4 @@ export class SuppliersService {
       data: updateSupplierDto,
     });
   }
-
-  async remove(id: number) {
-    const existingSupplier = await this.databaseService.supplier.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!existingSupplier) throw new NotFoundException('Supplier not found');
-
-    try {
-      await this.databaseService.supplier.delete({
-        where: {
-          id,
-        },
-      });
-
-      return {
-        message: 'Supplier deleted successfully',
-      };
-    } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException('Failed to delete supplier');
-    }
-  }
 }

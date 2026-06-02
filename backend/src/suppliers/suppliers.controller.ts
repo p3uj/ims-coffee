@@ -40,9 +40,4 @@ export class SuppliersController {
   ) {
     return this.suppliersService.update(id, updateSupplierDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.suppliersService.remove(id);
-  }
 }
