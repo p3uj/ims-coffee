@@ -32,7 +32,7 @@ export class MeasurementUnitsController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.measurementUnitsService.findOne(+id);
+    return this.measurementUnitsService.findOne(id);
   }
 
   @Patch(':id')
@@ -40,6 +40,6 @@ export class MeasurementUnitsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMeasurementUnitDto: UpdateMeasurementUnitDto,
   ) {
-    return this.measurementUnitsService.update(+id, updateMeasurementUnitDto);
+    return this.measurementUnitsService.update(id, updateMeasurementUnitDto);
   }
 }
