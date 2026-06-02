@@ -96,30 +96,4 @@ export class UsersService {
       select: userSelect,
     });
   }
-
-  async remove(id: number) {
-    const existingUser = await this.databaseService.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!existingUser) throw new NotFoundException('User not found');
-
-    try {
-      await this.databaseService.user.delete({
-        where: {
-          id,
-        },
-      });
-
-      return {
-        message: 'User deleted successfully',
-      };
-    } catch (error) {
-      console.error(error);
-
-      throw new InternalServerErrorException('Failed to delete user');
-    }
-  }
 }
