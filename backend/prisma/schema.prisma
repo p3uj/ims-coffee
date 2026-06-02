@@ -64,7 +64,8 @@ model Supplier {
 
 model MeasurementUnit {
   id Int @id @default(autoincrement())
-  name String @unique
+  name String
+  code String @unique
 
   ingredients Ingredient[]
 
