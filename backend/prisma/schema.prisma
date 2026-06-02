@@ -89,6 +89,8 @@ model Ingredient {
   purchaseOrderItems    PurchaseOrderItem[]
   inventoryTransactions InventoryTransaction[]
 
+  /// Prevent duplicate ingredients per measurement unit (name + unit combination)
+  @@unique([name, measurementUnitId])
   @@map("ingredients")
 }
 
