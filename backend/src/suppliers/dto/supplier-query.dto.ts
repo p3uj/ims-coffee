@@ -1,6 +1,6 @@
 import { RecordStatus } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export class SupplierQueryDto {
   @IsOptional()
@@ -18,6 +18,7 @@ export class SupplierQueryDto {
   @IsOptional()
   address?: string;
 
+  @IsEnum(RecordStatus)
   @IsOptional()
   @Transform(({ value }) => value.toUpperCase())
   recordStatus?: RecordStatus;
