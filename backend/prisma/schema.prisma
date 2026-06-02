@@ -9,14 +9,14 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // uncomment next line if you use Prisma <5.10
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Role {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String @unique
 
   users User[]
@@ -25,34 +25,34 @@ model Role {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id     Int @id @default(autoincrement())
   roleId Int
 
-  email String @unique
-  firstName String 
-  lastName String
-  password String
-  isActive Boolean @default(true)
+  email     String  @unique
+  firstName String
+  lastName  String
+  password  String
+  isActive  Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   role Role @relation(fields: [roleId], references: [id])
 
-  purchaseOrder PurchaseOrder[]
+  purchaseOrder         PurchaseOrder[]
   inventoryTransactions InventoryTransaction[]
 
   @@map("users")
 }
 
 model Supplier {
-  id Int @id @default(autoincrement())
-  name String
+  id            Int          @id @default(autoincrement())
+  name          String
   contactPerson String?
-  phoneNumber String
-  email String @unique
-  address String
-  recordStatus RecordStatus @default(ACTIVE)
+  phoneNumber   String
+  email         String       @unique
+  address       String
+  recordStatus  RecordStatus @default(ACTIVE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,7 +63,7 @@ model Supplier {
 }
 
 model MeasurementUnit {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
   code String @unique
 
@@ -73,12 +73,12 @@ model MeasurementUnit {
 }
 
 model Ingredient {
-  id Int @id @default(autoincrement())
+  id                Int @id @default(autoincrement())
   measurementUnitId Int
 
-  name String
-  currentStock Decimal  @db.Decimal(10, 2)
-  reorderLevel Decimal  @db.Decimal(10, 2)
+  name         String
+  currentStock Decimal      @db.Decimal(10, 2)
+  reorderLevel Decimal      @db.Decimal(10, 2)
   recordStatus RecordStatus @default(ACTIVE)
 
   createdAt DateTime @default(now())
@@ -86,27 +86,27 @@ model Ingredient {
 
   measurementUnit MeasurementUnit @relation(fields: [measurementUnitId], references: [id])
 
-  purchaseOrderItems PurchaseOrderItem[]
+  purchaseOrderItems    PurchaseOrderItem[]
   inventoryTransactions InventoryTransaction[]
 
   @@map("ingredients")
 }
 
 model PurchaseOrder {
-  id Int @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   supplierId Int
-  createdBy Int
+  createdBy  Int
 
-  status PurchaseOrderStatus
-  orderDate DateTime
+  status       PurchaseOrderStatus
+  orderDate    DateTime
   receivedDate DateTime?
-  recordStatus RecordStatus @default(ACTIVE)
-  
+  recordStatus RecordStatus        @default(ACTIVE)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   supplier Supplier @relation(fields: [supplierId], references: [id])
-  creator User @relation(fields: [createdBy], references: [id])
+  creator  User     @relation(fields: [createdBy], references: [id])
 
   purchaseOrderItems PurchaseOrderItem[]
 
@@ -114,40 +114,40 @@ model PurchaseOrder {
 }
 
 model PurchaseOrderItem {
-  id Int @id @default(autoincrement())
+  id              Int @id @default(autoincrement())
   purchaseOrderId Int
-  ingredientId Int
+  ingredientId    Int
 
-  quantity Int
-  unitCost Decimal  @db.Decimal(10, 2)
+  quantity     Int
+  unitCost     Decimal      @db.Decimal(10, 2)
   recordStatus RecordStatus @default(ACTIVE)
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient    Ingredient    @relation(fields: [ingredientId], references: [id])
 
   @@map("purchase_order_items")
 }
 
 model InventoryTransaction {
-  id Int @id @default(autoincrement())
+  id           Int @id @default(autoincrement())
   ingredientId Int
-  createdBy Int
+  createdBy    Int
 
   transactionType TransactionType
-  referenceType ReferenceType
-  quantity Int
-  referenceId Int?
-  notes String?
-  recordStatus RecordStatus @default(ACTIVE)
+  referenceType   ReferenceType
+  quantity        Int
+  referenceId     Int?
+  notes           String?
+  recordStatus    RecordStatus    @default(ACTIVE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
-  creator User @relation(fields: [createdBy], references: [id])
+  creator    User       @relation(fields: [createdBy], references: [id])
 
   @@map("inventory_transactions")
 }
