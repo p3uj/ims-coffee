@@ -8,6 +8,8 @@ import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { ingredientSelect } from './queries/ingredient.select';
 import { Prisma } from '@prisma/client';
+import { IngredientQueryDto } from './dto/ingredient-query.dto';
+import { ingredientWhere } from './queries/ingredient.where';
 
 @Injectable()
 export class IngredientsService {
@@ -41,8 +43,9 @@ export class IngredientsService {
     });
   }
 
-  async findAll() {
+  async findAll(query: IngredientQueryDto) {
     return this.databaseService.ingredient.findMany({
+      where: ingredientWhere(query),
       select: ingredientSelect,
     });
   }
