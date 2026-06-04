@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
+import { DatabaseService } from 'src/database/database.service';
+import { PurchaseOrderQueryDto } from './dto/purchase-order-query.dto';
+import { purchaseOrderWhere } from './queries/purchase-order.where';
+import { purchaseOrderSelect } from './queries/purchase-order.select';
 
 @Injectable()
 export class PurchaseOrdersService {
-  create(createPurchaseOrderDto: CreatePurchaseOrderDto) {
-    return 'This action adds a new purchaseOrder';
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async create(createPurchaseOrderDto: CreatePurchaseOrderDto) {
+    return this.databaseService.purchaseOrder.create({
+      data: createPurchaseOrderDto,
+      select: purchaseOrderSelect,
+    });
   }
 
-  findAll() {
-    return `This action returns all purchaseOrders`;
+  async findAll(query: PurchaseOrderQueryDto) {
+    return this.databaseService.purchaseOrder.findMany({
+      where: purchaseOrderWhere(query),
+      select: purchaseOrderSelect,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} purchaseOrder`;
+  async findOne(id: number) {
+    const existingPurchaseOrder =
+      await this.databaseService.purchaseOrder.findUnique({
+        where: {
+          id,
+        },
+        select: purchaseOrderSelect,
+      });
+
+    if (!existingPurchaseOrder)
+      throw new NotFoundException('Purchase order not found');
+
+    return existingPurchaseOrder;
   }
 
-  update(id: number, updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
-    return `This action updates a #${id} purchaseOrder`;
-  }
+  async update(id: number, updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
+    const existingPurchaseOrder =
+      await this.databaseService.purchaseOrder.findUnique({
+        where: {
+          id,
+        },
+      });
 
-  remove(id: number) {
-    return `This action removes a #${id} purchaseOrder`;
+    if (!existingPurchaseOrder)
+      throw new NotFoundException('Purchase order not found');
+
+    return this.databaseService.purchaseOrder.update({
+      where: {
+        id,
+      },
+      data: updatePurchaseOrderDto,
+      select: purchaseOrderSelect,
+    });
   }
 }
