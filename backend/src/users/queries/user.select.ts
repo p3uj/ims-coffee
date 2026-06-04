@@ -8,5 +8,17 @@ export const userSelect = {
   isActive: true,
   createdAt: true,
   updatedAt: true,
+
   role: true,
+} satisfies Prisma.UserSelect;
+
+export const userBasicSelect = {
+  firstName: true,
+  lastName: true,
+
+  role: {
+    select: {
+      name: true,
+    },
+  },
 } satisfies Prisma.UserSelect;
