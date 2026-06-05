@@ -8,9 +8,10 @@ import { SuppliersModule } from './suppliers/suppliers.module';
 import { MeasurementUnitsModule } from './measurement-units/measurement-units.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
+import { PurchaseOrderItemsModule } from './purchase-order-items/purchase-order-items.module';
 
 @Module({
-  imports: [DatabaseModule, RolesModule, UsersModule, SuppliersModule, MeasurementUnitsModule, IngredientsModule, PurchaseOrdersModule],
+  imports: [DatabaseModule, RolesModule, UsersModule, SuppliersModule, MeasurementUnitsModule, IngredientsModule, PurchaseOrdersModule, PurchaseOrderItemsModule],
   controllers: [AppController],
   providers: [AppService],
 })
