@@ -10,3 +10,10 @@ export const ingredientSelect = {
   updatedAt: true,
   measurementUnit: true,
 } satisfies Prisma.IngredientSelect;
+
+export const ingredientBasicSelect = {
+  id: true,
+  name: true,
+
+  measurementUnit: true,
+} satisfies Prisma.IngredientSelect;
