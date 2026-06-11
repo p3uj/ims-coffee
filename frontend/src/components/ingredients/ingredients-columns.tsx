@@ -12,7 +12,7 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-        Email
+        Name
         {column.getIsSorted() === "desc" ? (
           <span className="flex">
             <ArrowDown className="ml-2 h-4 w-4" />
