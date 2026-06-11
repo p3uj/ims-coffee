@@ -4,7 +4,7 @@ import { ingredientsColumns } from "./ingredients-columns";
 
 export function IngredientsTable() {
   return (
-    <div>
+    <div className="hidden lg:block">
       <DataTable columns={ingredientsColumns} data={mockIngredients} />
     </div>
   );
