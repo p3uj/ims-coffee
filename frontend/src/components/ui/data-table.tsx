@@ -5,6 +5,7 @@ import {
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -19,33 +20,65 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "./button";
-import React from "react";
+import React, { useState } from "react";
+import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchableFields?: string[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  searchableFields,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+
+    getFilteredRowModel: getFilteredRowModel(),
+
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: (row, _, filterValue) => {
+      const search = filterValue.toLowerCase();
+
+      const searchFields = [
+        searchableFields?.map((field) => row.getValue(field)),
+      ];
+
+      return searchFields.some((field) =>
+        String(field ?? "")
+          .toLowerCase()
+          .includes(search),
+      );
+    },
+
     state: {
       sorting,
+      globalFilter,
     },
   });
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Search..."
+          value={globalFilter}
+          onChange={(event) => setGlobalFilter(event.target.value)}
+          className="max-w-sm"
+        />
+      </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
