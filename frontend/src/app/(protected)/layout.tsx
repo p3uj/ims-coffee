@@ -31,11 +31,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full min-w-[320px] flex flex-col">
         <SidebarProvider>
           <AppSidebar />
           <Providers>
-            <main>
+            <main className="flex flex-col w-full p-4 gap-4">
               <SidebarTrigger />
               <TooltipProvider>{children}</TooltipProvider>
             </main>
