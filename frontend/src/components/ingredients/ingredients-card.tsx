@@ -40,8 +40,8 @@ export function IngredientsCard() {
   const filterOptions = ["all", "syrups", "dairy", "beans"];
 
   return (
-    <>
-      <section className="flex flex-wrap gap-3 mb-4 lg:hidden">
+    <div className="flex flex-col gap-4 py-4">
+      <section className="flex flex-wrap gap-3">
         <Input
           placeholder="Search name, current stock, or reorder level..."
           className="w-full"
@@ -62,7 +62,7 @@ export function IngredientsCard() {
         </Combobox>
       </section>
 
-      <Tabs defaultValue="all" className="lg:hidden">
+      <Tabs defaultValue="all">
         <div className="flex justify-end">
           <TabsHighlight className="bg-background absolute z-0 inset-0 rounded-full">
             <TabsList className="h-10 inline-flex p-1 bg-accent w-fit rounded-full">
@@ -86,7 +86,7 @@ export function IngredientsCard() {
         <TabsContents className="px-[1px] py-3">
           <TabsContent
             value="all"
-            className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 gap-4 lg:hidden">
+            className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="w-full">
                 <div className="flex flex-wrap items-center gap-1">
@@ -225,7 +225,7 @@ export function IngredientsCard() {
 
           <TabsContent
             value="archived"
-            className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 gap-4 lg:hidden">
+            className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="w-full">
                 <div className="flex flex-wrap items-center gap-1">
@@ -267,6 +267,6 @@ export function IngredientsCard() {
           </TabsContent>
         </TabsContents>
       </Tabs>
-    </>
+    </div>
   );
 }
