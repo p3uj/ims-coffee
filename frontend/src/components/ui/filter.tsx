@@ -18,13 +18,20 @@ interface FilterProps {
 }
 
 export function Filter({ title, label, options }: FilterProps) {
-  const [selectedOption, setSelectedOption] = useState<string>("All");
+  const defaultSelectedOption = {
+    id: 0,
+    value: "all",
+    label: "All",
+  };
+  const [selectedOption, setSelectedOption] = useState<FilterOption>(
+    defaultSelectedOption,
+  );
 
   const handleValueChange = (value: string) => {
-    const optionLabel =
-      options.find((opt) => opt.value === value)?.label ?? "All";
+    const matchedValue =
+      options.find((opt) => opt.value === value) ?? defaultSelectedOption;
 
-    setSelectedOption(optionLabel);
+    setSelectedOption(matchedValue);
   };
 
   return (
@@ -32,7 +39,7 @@ export function Filter({ title, label, options }: FilterProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex-1">
           <FilterIcon />
-          {selectedOption === "All" ? title : selectedOption}
+          {selectedOption.label === "All" ? title : selectedOption.label}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -40,7 +47,7 @@ export function Filter({ title, label, options }: FilterProps) {
           {label && <DropdownMenuLabel>{label}</DropdownMenuLabel>}
 
           <DropdownMenuRadioGroup
-            value={selectedOption}
+            value={selectedOption.value}
             onValueChange={handleValueChange}>
             {options.map((option) => (
               <DropdownMenuRadioItem key={option.id} value={option.value}>
