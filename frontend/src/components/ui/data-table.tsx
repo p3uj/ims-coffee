@@ -84,9 +84,7 @@ export function DataTable<TData, TValue>({
         />
 
         {/* Filtering */}
-        {children && (
-          <section className="flex flex-1 sm:flex-0 gap-2">{children}</section>
-        )}
+        {children && children}
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
