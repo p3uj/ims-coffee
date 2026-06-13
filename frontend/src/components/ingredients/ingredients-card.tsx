@@ -4,7 +4,6 @@ import {
   ArchiveRestore,
   CircleCheck,
   Pencil,
-  RotateCcw,
   Trash2,
   TriangleAlert,
 } from "lucide-react";
@@ -28,24 +27,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "../animate-ui/primitives/radix/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Filter } from "../ui/filter";
+import { IngredientsFilter } from "./ingredients-filter";
 
 export function IngredientsCard() {
-  const filterCategory = [
-    { value: "all", label: "All" },
-    { value: "syrups", label: "Syrups" },
-    { value: "dairy", label: "Dairy" },
-    { value: "beans", label: "Beans" },
-  ];
-
-  const filterStatus = [
-    { value: "all", label: "All" },
-    { value: "in stock", label: "In Stock" },
-    { value: "low stock", label: "Low Stock" },
-    { value: "out of stock", label: "Out of Stock" },
-  ];
-
   return (
     <div className="flex flex-col gap-4 py-4">
       <div className="flex flex-wrap justify-between gap-2">
@@ -55,29 +39,7 @@ export function IngredientsCard() {
           className="w-full sm:flex-1 lg:max-w-[450px]"
         />
 
-        <section className="flex flex-1 sm:flex-0 gap-2">
-          {/* Category Filter */}
-          <Filter
-            title="Category"
-            label="Filter Category"
-            options={filterCategory}
-          />
-
-          {/* Status Filter */}
-          <Filter title="Status" label="Filter Status" options={filterStatus} />
-
-          {/* Reset Filters */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="destructive">
-                <RotateCcw />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Reset filters</p>
-            </TooltipContent>
-          </Tooltip>
-        </section>
+        <IngredientsFilter />
       </div>
 
       <Tabs defaultValue="all">
