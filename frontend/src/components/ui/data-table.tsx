@@ -27,12 +27,16 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchableFields?: string[];
+  searchLabel?: string;
+  children?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchableFields,
+  searchLabel,
+  children,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -70,14 +74,19 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center py-4">
+    <div className="flex flex-col gap-4 py-4">
+      <div className="flex flex-wrap justify-between gap-2">
         <Input
-          placeholder="Search..."
+          placeholder={searchLabel ?? "Search..."}
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="w-full sm:flex-1 lg:max-w-[450px]"
         />
+
+        {/* Filtering */}
+        {children && (
+          <section className="flex flex-1 sm:flex-0 gap-2">{children}</section>
+        )}
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
