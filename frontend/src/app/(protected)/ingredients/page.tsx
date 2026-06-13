@@ -11,12 +11,20 @@ import {
 } from "@/components/animate-ui/primitives/radix/tabs";
 import { IngredientsCard } from "@/components/ingredients/ingredients-card";
 import { IngredientsTable } from "@/components/ingredients/ingredients-table";
-import { LayoutGrid, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { LayoutGrid, List, Plus } from "lucide-react";
 
 export default function Ingredients() {
   return (
     <>
-      <header>Ingredients</header>
+      <header className="flex items-center justify-between gap-4">
+        <h1 className="text-xl font-semibold">Ingredients</h1>
+
+        <Button size="lg" className="fixed bottom-5 right-5 z-10 sm:static">
+          <Plus />
+          New
+        </Button>
+      </header>
       <main>
         <Tabs defaultValue="list">
           <TabsHighlight className="border-b-2 border-primary absolute z-0 inset-0">
