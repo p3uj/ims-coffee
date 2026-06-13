@@ -4,6 +4,7 @@ import {
   ArchiveRestore,
   CircleCheck,
   Pencil,
+  RotateCcw,
   Trash2,
   TriangleAlert,
 } from "lucide-react";
@@ -19,14 +20,6 @@ import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
 import { Input } from "../ui/input";
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "../ui/combobox";
-import {
   Tabs,
   TabsContent,
   TabsContents,
@@ -35,32 +28,57 @@ import {
   TabsList,
   TabsTrigger,
 } from "../animate-ui/primitives/radix/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Filter } from "../ui/filter";
 
 export function IngredientsCard() {
-  const filterOptions = ["all", "syrups", "dairy", "beans"];
+  const filterCategory = [
+    { value: "all", label: "All" },
+    { value: "syrups", label: "Syrups" },
+    { value: "dairy", label: "Dairy" },
+    { value: "beans", label: "Beans" },
+  ];
+
+  const filterStatus = [
+    { value: "all", label: "All" },
+    { value: "in stock", label: "In Stock" },
+    { value: "low stock", label: "Low Stock" },
+    { value: "out of stock", label: "Out of Stock" },
+  ];
 
   return (
     <div className="flex flex-col gap-4 py-4">
-      <section className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap justify-between gap-2">
+        {/* Search Bar */}
         <Input
           placeholder="Search name, current stock, or reorder level..."
-          className="w-full"
+          className="w-full sm:flex-1 lg:max-w-[450px]"
         />
 
-        <Combobox items={filterOptions}>
-          <ComboboxInput placeholder="Select a category" className="w-full" />
-          <ComboboxContent>
-            <ComboboxEmpty>No items found.</ComboboxEmpty>
-            <ComboboxList>
-              {(item) => (
-                <ComboboxItem key={item} value={item} className="capitalize">
-                  {item}
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
-      </section>
+        <section className="flex flex-1 sm:flex-0 gap-2">
+          {/* Category Filter */}
+          <Filter
+            title="Category"
+            label="Filter Category"
+            options={filterCategory}
+          />
+
+          {/* Status Filter */}
+          <Filter title="Status" label="Filter Status" options={filterStatus} />
+
+          {/* Reset Filters */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="destructive">
+                <RotateCcw />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reset filters</p>
+            </TooltipContent>
+          </Tooltip>
+        </section>
+      </div>
 
       <Tabs defaultValue="all">
         <div className="flex justify-end">
