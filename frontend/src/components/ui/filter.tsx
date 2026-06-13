@@ -11,11 +11,6 @@ import {
 } from "../ui/dropdown-menu";
 import { useState } from "react";
 
-interface FilterOption {
-  value: string;
-  label: string;
-}
-
 interface FilterProps {
   title: string;
   label?: string;
@@ -23,14 +18,21 @@ interface FilterProps {
 }
 
 export function Filter({ title, label, options }: FilterProps) {
-  const [selectedOption, setSelectedOption] = useState<string>("all");
+  const [selectedOption, setSelectedOption] = useState<string>("All");
+
+  const handleValueChange = (value: string) => {
+    const optionLabel =
+      options.find((opt) => opt.value === value)?.label ?? "All";
+
+    setSelectedOption(optionLabel);
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex-1">
           <FilterIcon />
-          {selectedOption === "all" ? title : selectedOption}
+          {selectedOption === "All" ? title : selectedOption}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -39,9 +41,9 @@ export function Filter({ title, label, options }: FilterProps) {
 
           <DropdownMenuRadioGroup
             value={selectedOption}
-            onValueChange={setSelectedOption}>
-            {options.map((option, index) => (
-              <DropdownMenuRadioItem key={index} value={option.value}>
+            onValueChange={handleValueChange}>
+            {options.map((option) => (
+              <DropdownMenuRadioItem key={option.id} value={option.value}>
                 {option.label}
               </DropdownMenuRadioItem>
             ))}
