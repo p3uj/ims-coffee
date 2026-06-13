@@ -39,14 +39,15 @@ export default function Ingredients() {
               </TabsHighlightItem>
             </TabsList>
           </TabsHighlight>
-          <TabsContents>
-            <TabsContent value="list">
-              {/* Laptop to Desktop View */}
-              <IngredientsTable />
-            </TabsContent>
+          <TabsContents className="px-[1px]">
+            {/* Mobile to Tablet View */}
             <TabsContent value="grid">
-              {/* Mobile View */}
               <IngredientsCard />
+            </TabsContent>
+
+            {/* Laptop to Desktop View */}
+            <TabsContent value="list">
+              <IngredientsTable />
             </TabsContent>
           </TabsContents>
         </Tabs>
