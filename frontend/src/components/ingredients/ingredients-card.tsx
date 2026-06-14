@@ -13,6 +13,10 @@ import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
 import { Input } from "../ui/input";
 import { IngredientsFilter } from "./ingredients-filter";
+import { mockIngredients } from "@/lib/mock/mock-ingredients";
+import { cn } from "@/lib/utils";
+import { INGREDIENT_CATEGORY_COLORS } from "@/constants/ingredients";
+import { getBgColor } from "@/lib/utils/color";
 
 export function IngredientsCard() {
   return (
@@ -28,140 +32,74 @@ export function IngredientsCard() {
       </div>
 
       <div className="grid grid-cols-1 min-[375px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="w-full">
-            <div className="flex flex-wrap items-center gap-1">
-              <Badge className="flex-1 max-w-fit mr-auto bg-purple-50 text-purple-500">
-                <span className="truncate">Syrups</span>
-              </Badge>
+        {mockIngredients.map((ingredient) => (
+          <Card key={ingredient.id}>
+            <CardHeader className="w-full">
+              <div className="flex flex-wrap items-center gap-1">
+                <Badge
+                  className={cn(
+                    "flex-1 max-w-fit mr-auto",
+                    INGREDIENT_CATEGORY_COLORS[ingredient.category],
+                  )}>
+                  <span className="truncate">{ingredient.category}</span>
+                </Badge>
 
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400">
-                <Pencil />
-              </Button>
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400 hover:text-red-500 hover:bg-red-50">
-                <Trash2 />
-              </Button>
-            </div>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                  className="w-fit px-[6px] text-gray-400">
+                  <Pencil />
+                </Button>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                  className="w-fit px-[6px] text-gray-400 hover:text-red-500 hover:bg-red-50">
+                  <Trash2 />
+                </Button>
+              </div>
 
-            <CardTitle>Vanilla Syrup</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col gap-2">
-            <div className="flex flex-wrap justify-between">
-              <span className="text-gray-500 text-xs">Stock Level</span>
-              <p>
-                20 <span className="text-gray-500">of 30 bottles</span>
+              <CardTitle>{ingredient.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col gap-2">
+              <div className="flex flex-wrap justify-between">
+                <span className="text-gray-500 text-xs">Stock Level</span>
+                <p>
+                  {ingredient.currentStock}{" "}
+                  <span className="text-gray-500">
+                    of {ingredient.initialStock} {ingredient.measurementUnit}
+                  </span>
+                </p>
+              </div>
+
+              <Progress
+                value={
+                  (ingredient.currentStock / ingredient.initialStock) * 100
+                }
+                className={cn(
+                  "h-[8px]",
+                  getBgColor(ingredient.status).progressDiv,
+                )}
+              />
+            </CardContent>
+            <CardFooter className="flex gap-2 text-xs justify-between flex-wrap">
+              <span
+                className={cn(
+                  "flex items-center gap-1 font-medium",
+                  getBgColor(ingredient.status).text,
+                )}>
+                {ingredient.status === "In Stock" ? (
+                  <CircleCheck size={12} strokeWidth={2.5} />
+                ) : (
+                  <TriangleAlert size={12} strokeWidth={2.5} />
+                )}
+                {ingredient.status}
+              </span>
+              <p className="text-gray-500">
+                Reorder at {ingredient.reorderLevel}
               </p>
-            </div>
-
-            <Progress
-              value={(20 / 30) * 100}
-              className="h-[8px] [&>div]:bg-green-500"
-            />
-          </CardContent>
-          <CardFooter className="flex gap-2 text-xs justify-between flex-wrap">
-            <span className="flex items-center gap-1 text-green-500 font-semibold">
-              <CircleCheck size={12} />
-              In stock
-            </span>
-            <p className="text-gray-500">Reorder at 5</p>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader className="w-full">
-            <div className="flex flex-wrap items-center gap-1">
-              <Badge className="flex-1 max-w-fit mr-auto bg-sky-50 text-sky-500">
-                <span className="truncate">Dairy</span>
-              </Badge>
-
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400">
-                <Pencil />
-              </Button>
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400 hover:text-red-500 hover:bg-red-50">
-                <Trash2 />
-              </Button>
-            </div>
-
-            <CardTitle>Whole Milk</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col gap-2">
-            <div className="flex flex-wrap justify-between">
-              <span className="text-gray-500 text-xs">Stock Level</span>
-              <p>
-                10 <span className="text-gray-500">of 50 liters</span>
-              </p>
-            </div>
-
-            <Progress
-              value={(10 / 50) * 100}
-              className="h-[8px] [&>div]:bg-amber-500"
-            />
-          </CardContent>
-          <CardFooter className="flex gap-2 text-xs justify-between flex-wrap">
-            <span className="flex items-center gap-1 text-amber-500 font-semibold">
-              <TriangleAlert size={12} />
-              Low stock
-            </span>
-            <p className="text-gray-500">Reorder at 10</p>
-          </CardFooter>
-        </Card>
-
-        <Card>
-          <CardHeader className="w-full">
-            <div className="flex flex-wrap items-center gap-1">
-              <Badge className="flex-1 max-w-fit mr-auto bg-orange-50 text-orange-500">
-                <span className="truncate">Beans</span>
-              </Badge>
-
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400">
-                <Pencil />
-              </Button>
-              <Button
-                size="xs"
-                variant="ghost"
-                className="w-fit px-[6px] text-gray-400 hover:text-red-500 hover:bg-red-50">
-                <Trash2 />
-              </Button>
-            </div>
-
-            <CardTitle>Espresso Beans</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col gap-2">
-            <div className="flex flex-wrap justify-between">
-              <span className="text-gray-500 text-xs">Stock Level</span>
-              <p>
-                0 <span className="text-gray-500">of 20 kg</span>
-              </p>
-            </div>
-
-            <Progress
-              value={(0 / 20) * 100}
-              className="h-[8px] [&>div]:bg-red-500"
-            />
-          </CardContent>
-          <CardFooter className="flex gap-2 text-xs justify-between flex-wrap">
-            <span className="flex items-center gap-1 text-red-500 font-semibold">
-              <TriangleAlert size={12} />
-              Out of stock
-            </span>
-            <p className="text-gray-500">Reorder at 8</p>
-          </CardFooter>
-        </Card>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
     </div>
   );
