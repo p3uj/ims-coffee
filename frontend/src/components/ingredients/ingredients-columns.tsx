@@ -9,6 +9,7 @@ import { getBgColor } from "@/lib/utils/color";
 import { Badge } from "../ui/badge";
 import { Ingredient } from "@/types/ingredients";
 import { cn } from "@/lib/utils";
+import { INGREDIENT_CATEGORY_COLORS } from "@/constants/ingredients";
 
 export const ingredientsColumns: ColumnDef<Ingredient>[] = [
   {
@@ -105,7 +106,13 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <Badge className={cn("px-1.5")}>{row.original.category}</Badge>
+      <Badge
+        className={cn(
+          "px-1.5",
+          INGREDIENT_CATEGORY_COLORS[row.original.category],
+        )}>
+        {row.original.category}
+      </Badge>
     ),
   },
   {
