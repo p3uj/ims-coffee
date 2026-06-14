@@ -1,9 +1,22 @@
-export function getBgColor(currentValue: number, reorderLevel: number) {
-  if (currentValue > reorderLevel) {
-    return "green-500";
-  } else if (currentValue <= reorderLevel && currentValue != 0) {
-    return "amber-500";
-  } else {
-    return "red-500";
+import { IngredientStatus } from "@/types/ingredients";
+
+export function getBgColor(status: IngredientStatus) {
+  if (status === "In Stock") {
+    return {
+      color: "green-500",
+      color100: "green-100",
+    };
   }
+
+  if (status === "Low Stock") {
+    return {
+      color: "amber-500",
+      color100: "amber-100",
+    };
+  }
+
+  return {
+    color: "red-500",
+    color100: "red-100",
+  };
 }
