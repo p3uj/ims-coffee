@@ -1,4 +1,4 @@
-import { FilePenLine, Trash, View } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,18 +23,7 @@ export function IngredientsDialog() {
     <div>
       <Dialog>
         <DialogTrigger>
-          <View />
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Ingredient's Name</DialogTitle>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog>
-        <DialogTrigger>
-          <FilePenLine />
+          <Pencil />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -45,7 +34,7 @@ export function IngredientsDialog() {
 
       <AlertDialog>
         <AlertDialogTrigger>
-          <Trash />
+          <Trash2 />
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
