@@ -6,7 +6,7 @@ import { ingredientsColumns } from "./ingredients-columns";
 import { IngredientsFilter } from "./ingredients-filter";
 
 export function IngredientsTable() {
-  const searchableFields = ["name", "currentStock", "reorderLevel"];
+  const searchableFields = ["name", "currentStock", "reorderLevel", "status"];
 
   return (
     <DataTable
