@@ -6,6 +6,7 @@ export type IngredientStatus =
 export interface Ingredient {
   id: number;
   name: string;
+  category: string;
   initialStock: number;
   currentStock: number;
   reorderLevel: number;
