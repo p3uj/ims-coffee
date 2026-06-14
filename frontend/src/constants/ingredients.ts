@@ -38,3 +38,13 @@ export const INGREDIENT_CATEGORY_COLORS: Record<IngredientCategory, string> = {
   [INGREDIENT_CATEGORIES.BAKERY]: "bg-stone-100 text-stone-800",
   [INGREDIENT_CATEGORIES.CONDIMENTS]: "bg-cyan-100 text-cyan-800",
 };
+
+export const MEASUREMENT_UNITS = {
+  GRAMS: "g",
+  KILOGRAMS: "kg",
+  MILLILITERS: "ml",
+  LITERS: "L",
+  PIECES: "pcs",
+  PACKS: "pack",
+  BOXES: "box",
+} as const;
