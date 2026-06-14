@@ -87,6 +87,28 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
     ),
   },
   {
+    accessorKey: "category",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        Category
+        {column.getIsSorted() === "desc" ? (
+          <span className="flex">
+            <ArrowDown className="ml-2 h-4 w-4" />
+          </span>
+        ) : column.getIsSorted() === "asc" ? (
+          <ArrowUp className="ml-2 h-4 w-4" />
+        ) : (
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        )}
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <Badge className={cn("px-1.5")}>{row.original.category}</Badge>
+    ),
+  },
+  {
     accessorKey: "status",
     header: ({ column }) => (
       <Button
