@@ -8,6 +8,7 @@ import { Progress } from "../ui/progress";
 import { getBgColor } from "@/lib/utils/color";
 import { Badge } from "../ui/badge";
 import { Ingredient } from "@/types/ingredients";
+import { cn } from "@/lib/utils";
 
 export const ingredientsColumns: ColumnDef<Ingredient>[] = [
   {
@@ -50,16 +51,15 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
     cell: ({ row }) => {
       const currentStock = row.original.currentStock;
       const initialStock = row.original.initialStock;
-      const bgColor = getBgColor(row.original.status);
+      const classes = getBgColor(row.original.status);
 
       return (
         <div className="flex items-center text-gray-500">
           <Progress
             value={(currentStock / initialStock) * 100}
-            className={`h-[8px] [&>div]:bg-${bgColor.color} mr-2 max-w-[150px]`}
+            className={cn("h-[8px] mr-2 max-w-[150px]", classes.progressDiv)}
           />
-          <span className={`text-${bgColor.color}`}>{currentStock}</span>/
-          {initialStock}
+          <span className={classes.text}>{currentStock}</span>/{initialStock}
         </div>
       );
     },
@@ -105,11 +105,17 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const bgColor = getBgColor(row.original.status);
+      const classes = getBgColor(row.original.status);
 
       return (
         <Badge
-          className={`px-1.5 bg-${bgColor.color100} text-${bgColor.color} before:h-1.5 before:w-1.5 before:bg-${bgColor.color} before:rounded-full`}>
+          className={cn(
+            "px-1.5",
+            classes.bg,
+            classes.text,
+            "before:h-1.5 before:w-1.5 before:rounded-full",
+            classes.indicator,
+          )}>
           {row.original.status}
         </Badge>
       );
