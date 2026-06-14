@@ -6,14 +6,20 @@ import { ingredientsColumns } from "./ingredients-columns";
 import { IngredientsFilter } from "./ingredients-filter";
 
 export function IngredientsTable() {
-  const searchableFields = ["name", "currentStock", "reorderLevel", "status"];
+  const searchableFields = [
+    "name",
+    "currentStock",
+    "reorderLevel",
+    "category",
+    "status",
+  ];
 
   return (
     <DataTable
       columns={ingredientsColumns}
       data={mockIngredients}
       searchableFields={searchableFields}
-      searchLabel="Search name, current stock, or reorder level...">
+      searchLabel="Search name, current stock, reorder level, category, or status...">
       <IngredientsFilter />
     </DataTable>
   );
