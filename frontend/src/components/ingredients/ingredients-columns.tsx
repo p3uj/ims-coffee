@@ -84,7 +84,9 @@ export const ingredientsColumns: ColumnDef<Ingredient>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <Badge className="px-1.5">{row.original.reorderLevel}</Badge>
+      <Badge className="px-1.5">
+        {row.original.reorderLevel} {row.original.measurementUnit}
+      </Badge>
     ),
   },
   {
