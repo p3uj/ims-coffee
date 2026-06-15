@@ -1,7 +1,6 @@
 "use client";
 
-import { CircleCheck, Pencil, Trash2, TriangleAlert } from "lucide-react";
-import { Button } from "../ui/button";
+import { CircleCheck, TriangleAlert } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -17,6 +16,7 @@ import { mockIngredients } from "@/lib/mock/mock-ingredients";
 import { cn } from "@/lib/utils";
 import { INGREDIENT_CATEGORY_COLORS } from "@/constants/ingredients";
 import { getBgColor } from "@/lib/utils/color";
+import { IngredientsDialog } from "./ingredients-dialog";
 
 export function IngredientsCard() {
   return (
@@ -44,18 +44,7 @@ export function IngredientsCard() {
                   <span className="truncate">{ingredient.category}</span>
                 </Badge>
 
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  className="w-fit px-[6px] text-gray-400">
-                  <Pencil />
-                </Button>
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  className="w-fit px-[6px] text-gray-400 hover:text-red-500 hover:bg-red-50">
-                  <Trash2 />
-                </Button>
+                <IngredientsDialog buttonSize="xs" className="text-gray-400" />
               </div>
 
               <CardTitle>{ingredient.name}</CardTitle>
