@@ -1,11 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,18 +12,26 @@ import {
 } from "../ui/alert-dialog";
 import { IngredientsUpdate } from "./ingredients-update";
 import { Button } from "../ui/button";
+import { ActionButtonProps } from "@/types/ui";
+import { cn } from "@/lib/utils";
 
-export function IngredientsDialog() {
+export function IngredientsDialog({
+  className,
+  buttonSize = "sm",
+}: ActionButtonProps) {
   return (
     <div className="flex">
-      <IngredientsUpdate />
+      <IngredientsUpdate buttonSize={buttonSize} className={className} />
 
       <AlertDialog>
-        <AlertDialogTrigger>
+        <AlertDialogTrigger asChild>
           <Button
-            size="sm"
+            size={buttonSize}
             variant="ghost"
-            className=" hover:text-red-500 hover:bg-red-50">
+            className={cn(
+              "px-[6px] hover:text-red-500 hover:bg-red-50",
+              className,
+            )}>
             <Trash2 />
           </Button>
         </AlertDialogTrigger>
