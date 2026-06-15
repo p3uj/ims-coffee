@@ -1,4 +1,4 @@
-import { Pencil, Plus } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -12,13 +12,21 @@ import {
 import { Field, FieldGroup } from "../ui/field";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
+import { ActionButtonProps } from "@/types/ui";
 
-export function IngredientsUpdate() {
+export function IngredientsUpdate({
+  className,
+  buttonSize,
+}: ActionButtonProps) {
   return (
     <Dialog>
       <form action="" method="post">
         <DialogTrigger asChild>
-          <Button size="sm" variant="ghost">
+          <Button
+            size={buttonSize}
+            variant="ghost"
+            className={cn("px-[6px]", className)}>
             <Pencil />
           </Button>
         </DialogTrigger>
